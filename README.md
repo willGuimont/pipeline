@@ -2,6 +2,14 @@
 
 Some transforms utilities based on `Arrows` from Haskell.
 
+# Installation
+
+Add the following line in your `requirements.txt`:
+
+```
+git+https://github.com/willGuimont/pipeline
+```
+
 # Usage
 
 ```python
