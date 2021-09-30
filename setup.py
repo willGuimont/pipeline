@@ -1,6 +1,6 @@
 import setuptools
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 
 setuptools.setup(
@@ -10,10 +10,10 @@ setuptools.setup(
     author_email='william.guimont-martin.1@ulaval.ca',
     description='Some transforms utilities based on `Arrows` from Haskell',
     long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description_content_type='text/markdown',
     url='https://github.com/willGuimont/pipeline',
-    project_urls = {
-        "Bug Tracker": "https://github.com/willGuimont/pipeline/issues"
+    project_urls={
+        'Bug Tracker': 'https://github.com/willGuimont/pipeline/issues'
     },
     license='MIT',
     packages=['pipeline'],
