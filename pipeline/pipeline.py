@@ -51,6 +51,38 @@ class Compose:
         return format_string
 
 
+class Tupled:
+    """
+    Create a tuple by repeating the element
+    """
+
+    def __init__(self, n: int):
+        self.n = n
+
+    def __call__(self, x):
+        return tuple([x for _ in range(self.n)])
+
+    def __repr__(self):
+        return self.__class__.__name__ + '()'
+
+
+class MapAll:
+    """
+    Map a function to all elements of a tuple
+    """
+
+    def __init__(self, f: Callable):
+        if not callable(f):
+            raise TypeError("Argument lambda should be callable, got {}".format(repr(type(f).__name__)))
+        self.f = f
+
+    def __call__(self, x):
+        return tuple([self.f(e) for e in x])
+
+    def __repr__(self):
+        return self.__class__.__name__ + '()'
+
+
 class Tee:
     """
     Duplicate input
@@ -63,37 +95,58 @@ class Tee:
         return self.__class__.__name__ + '()'
 
 
-class First:
+class MapNth:
     """
-    Map function to first element of a pair
+    Map a function to the nth element
     """
 
-    def __init__(self, f: Callable):
+    def __init__(self, f: Callable, n: int):
         if not callable(f):
             raise TypeError("Argument lambda should be callable, got {}".format(repr(type(f).__name__)))
         self.f = f
+        self.n = n
 
     def __call__(self, x):
-        (a, b) = x
-        return self.f(a), b
+        before = x[:self.n]
+        elem = x[self.n]
+        after = x[self.n + 1:]
+        return *before, self.f(elem), *after
 
     def __repr__(self):
         return self.__class__.__name__ + '()'
 
 
-class Second:
+class First(MapNth):
+    """
+    Map function to first element of a pair
+    """
+
+    def __init__(self, f: Callable):
+        super().__init__(f, 0)
+
+    def __repr__(self):
+        return self.__class__.__name__ + '()'
+
+
+class Second(MapNth):
     """
     Map function to second element of a pair
     """
 
     def __init__(self, f: Callable):
-        if not callable(f):
-            raise TypeError("Argument lambda should be callable, got {}".format(repr(type(f).__name__)))
-        self.f = f
+        super().__init__(f, 1)
 
-    def __call__(self, x):
-        (a, b) = x
-        return a, self.f(b)
+    def __repr__(self):
+        return self.__class__.__name__ + '()'
+
+
+class Third(MapNth):
+    """
+    Map function to third element of a pair
+    """
+
+    def __init__(self, f: Callable):
+        super().__init__(f, 2)
 
     def __repr__(self):
         return self.__class__.__name__ + '()'
@@ -138,19 +191,32 @@ class Both:
         return self.__class__.__name__ + '()'
 
 
+class Inspect:
+    """
+    Print the current value then return it
+    """
+
+    def __call__(self, x):
+        print(x)
+        return x
+
+
 if __name__ == '__main__':
     input_value = 7
     transform = Compose([
-        Tee(),
+        Tupled(3),
         First(lambda x: x + 1),
         Second(lambda x: x - 1),
-        Both(lambda x: x * 2),
-        Bifunctor(lambda x: x // 3, lambda x: x * 2),
-        Both(str),
+        MapAll(lambda x: x * 2),
+        Inspect(),
+        First(lambda x: x // 3),
+        Second(lambda x: x * 2),
+        Third(lambda x: x + 1),
+        Inspect(),
+        MapAll(str),
         Lambda(lambda x: ''.join(x))
     ])
 
     output = transform(input_value)
     print(output)
-    assert output == "524"
-
+    assert output == '52415'
