@@ -1,0 +1,22 @@
+[build-system]
+requires = ['setuptools>=61.0']
+build-backend = 'setuptools.build_meta'
+[project]
+name = 'pipeline'
+version = '0.1.0'
+authors = [
+    { name = 'William Guimont-Martin', email = 'william.guimont-martin.1@ulaval.ca' },
+]
+description = 'Some transforms utilities based on `Arrows` from Haskell'
+readme = 'README.md'
+requires-python = '>=3.7'
+dependencies = []
+classifiers = [
+    'Programming Language :: Python :: 3',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+]
+[project.optional-dependencies]
+[project.urls]
+'Homepage' = 'https://github.com/willGuimont/pipeline'
+'Bug Tracker' = 'https://github.com/willGuimont/pipeline/issues'
